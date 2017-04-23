@@ -35,18 +35,12 @@ def get_rating_and_counting_ball(movie):
 
 def get_movie_rating(movie):
     rating = movie.find('span',{'class':'rating_ball'})
-    if rating:
-        return float(rating.text)
-    else:
-        return None
+    return float(rating.text) if rating else 0
 
 
 def get_movie_votes(movie):
     votes = movie.find('span',{'class':'ratingCount'})
-    if votes:
-        return int(re.sub('\s+','',votes.text))
-    else:
-        return None
+    return int(re.sub('\s+','',votes.text)) if votes else 0
 
 
 def collect_movie_information():
@@ -59,13 +53,13 @@ def collect_movie_information():
             'cinema_count': movie['count_of_cinema'],
             'rating': movie_rate['movie_rating'],
             'votes': movie_rate['movie_votes']
-            })
+        })
     return movies_store
 
 
 def show_to_console(movie_information):
     _best_kpi = 10
-    sorted_movies = sorted(movie_information, key=lambda elem:(elem['rating'] is not None, elem['rating']),reverse=True)[:_best_kpi]
+    sorted_movies = sorted(movie_information, key=lambda elem: elem['rating'], reverse=True)[:_best_kpi]
     for movie in sorted_movies:
         for attribute,value in movie.items():
             print('{} : {}'.format(attribute, value))
